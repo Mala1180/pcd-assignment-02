@@ -32,8 +32,7 @@ public class SourceAnalyser {
     private void readFiles() {
         try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
             Future<Set<Path>> future = executor.submit(new ReadFilesTask(this.path));
-            Set<Path> files = future.get();
-            System.out.println(files);
+            this.files = future.get();
             executor.shutdown();
             boolean isTerminatedCorrectly = executor.awaitTermination(30, TimeUnit.SECONDS);
             if (!isTerminatedCorrectly) {
@@ -45,6 +44,9 @@ public class SourceAnalyser {
     }
 
     private void countLines() {
+        for (Path file : this.files) {
+            System.out.println(file);
+        }
     }
 
 }

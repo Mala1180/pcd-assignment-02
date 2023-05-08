@@ -18,7 +18,7 @@ public class ReadFilesTask implements Callable<Set<Path>> {
     }
 
     @Override
-    public Set<Path> call() throws Exception {
+    public Set<Path> call() {
         if (this.directoryPath == null) {
             throw new IllegalArgumentException("Directory path cannot be null");
         }
@@ -30,7 +30,5 @@ public class ReadFilesTask implements Callable<Set<Path>> {
         }
         return files;
     }
-
-
 
 }
