@@ -2,7 +2,11 @@ package executors;
 
 import common.MyFileTask;
 
+import java.nio.file.Path;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 
 public class Executors {
@@ -10,7 +14,8 @@ public class Executors {
         System.out.println("Hello World!");
         //test
         ExecutorService exec = java.util.concurrent.Executors.newSingleThreadExecutor();
-        exec.execute(new MyFileTask("DIRECTORY"));
+        Future<?> cf = exec.submit(new MyFileTask("DIRECTORY"));
+
     }
 
 
