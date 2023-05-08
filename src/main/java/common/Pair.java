@@ -46,7 +46,7 @@ public final class Pair<X, Y> {
      * @return a string representing this pair's state
      */
     public String toString() {
-        return "Pair [first=" + first + ", second=" + second + "]";
+        return "{file=" + first + ", lines=" + second + "}";
     }
 
     /**

@@ -1,11 +1,11 @@
 package common;
 
-public class Chrono {
+public class Chronometer {
 
     private boolean running;
     private long startTime;
 
-    public Chrono() {
+    public Chronometer() {
         running = false;
     }
 
