@@ -4,7 +4,7 @@ import common.Chronometer;
 import common.Report;
 import executors.SourceAnalyser;
 
-public class Task1 {
+public class TaskApproach {
 
     public static void main(String[] args) {
         Chronometer chronometer = new Chronometer();
