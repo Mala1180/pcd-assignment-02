@@ -39,6 +39,7 @@ public class SourceAnalyser {
         return this.makeReport();
     }
 
+
     private void readFiles() {
         try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
             Future<Set<Path>> future = executor.submit(new ReadFilesTask(this.path));
