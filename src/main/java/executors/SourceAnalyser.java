@@ -53,7 +53,7 @@ public class SourceAnalyser {
 
     private void countLines() {
         try {
-            ExecutorService executor = Executors.newSingleThreadExecutor();
+            ExecutorService executor = Executors.newCachedThreadPool();
             Set<Future<Pair<String, Integer>>> futures = new HashSet<>();
             for (Path file : this.files) {
                 futures.add(executor.submit(new CountFileLinesTask(file)));

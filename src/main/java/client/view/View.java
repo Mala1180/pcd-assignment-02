@@ -13,6 +13,9 @@ public class View extends JFrame implements ActionListener {
     private final DefaultListModel<String> topFilesListModel = new DefaultListModel<>();
 
     private final JFileChooser chooser = new JFileChooser();
+    private final String[] approachChoice = new String[]{"Executor e Task", "Executor e Virtual Threads", "Vert.x e Eventi", "RxJava e Programmazione Reattiva"};
+    private final JComboBox<String> approachCombo = new JComboBox<>(approachChoice);
+
     private final JTextField directoryTxt = new JTextField(20);
     private final JTextField intervalsTxt = new JTextField(5);
     private final JTextField maxLinesTxt = new JTextField(5);
@@ -35,6 +38,9 @@ public class View extends JFrame implements ActionListener {
                         //controller.setParameters(directoryTxt.getText(), Integer.parseInt(intervalsTxt.getText()), Integer.parseInt(maxLinesTxt.getText()));
                     }
                     break;
+                case SET_APPROACH:
+                    setApproach();
+                    break;
                 case RESET:
                     resetParameters();
                     break;
@@ -43,6 +49,10 @@ public class View extends JFrame implements ActionListener {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void setApproach(){
+        System.out.println(approachCombo.getSelectedItem());
     }
 
 
@@ -75,6 +85,14 @@ public class View extends JFrame implements ActionListener {
         JPanel parametersPanel = new JPanel();
 
         //dir panel e interval panel inclusi in inline panel (horizontal)
+        JPanel approachPanel = new JPanel();
+        JLabel approachLabel = new JLabel("Seleziona approccio:");
+        approachPanel.add(approachLabel);
+        approachCombo.setSelectedIndex(0);
+        approachCombo.addActionListener(this);
+        approachCombo.setActionCommand(Event.SET_APPROACH.getCommand());
+        approachPanel.add(approachCombo);
+
         JPanel dirPanel = new JPanel();
         JLabel dirLabel = new JLabel("Dir:");
         dirPanel.add(dirLabel);
@@ -111,6 +129,7 @@ public class View extends JFrame implements ActionListener {
         inlinePanel.add(maxLinesPanel);
         parametersPanel.setLayout(new BoxLayout(parametersPanel, BoxLayout.X_AXIS));
 
+        parametersPanel.add(approachPanel);
         parametersPanel.add(dirPanel);
         parametersPanel.add(inlinePanel);
         parametersPanel.setLayout(new BoxLayout(parametersPanel, BoxLayout.Y_AXIS));
