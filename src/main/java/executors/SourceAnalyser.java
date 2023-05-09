@@ -41,7 +41,8 @@ public class SourceAnalyser {
 
 
     private void readFiles() {
-        try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
+        try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
             Future<Set<Path>> future = executor.submit(new ReadFilesTask(this.path));
             this.files = future.get();
             shutdownExecutor(executor);
@@ -51,7 +52,8 @@ public class SourceAnalyser {
     }
 
     private void countLines() {
-        try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
+        try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
             Set<Future<Pair<String, Integer>>> futures = new HashSet<>();
             for (Path file : this.files) {
                 futures.add(executor.submit(new CountFileLinesTask(file)));
