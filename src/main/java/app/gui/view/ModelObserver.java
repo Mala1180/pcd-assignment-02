@@ -1,6 +1,6 @@
-package app.view;
+package app.gui.view;
 
-import app.model.Model;
+import app.gui.model.Model;
 
 public interface ModelObserver {
 

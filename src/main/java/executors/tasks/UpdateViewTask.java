@@ -1,10 +1,8 @@
 package executors.tasks;
 
-import app.model.Model;
 import common.Pair;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class UpdateViewTask implements Callable<Future<Pair<String, Integer>>> {

@@ -1,18 +1,14 @@
-package app.view;
+package app.gui.view;
 
-import app.controller.Controller;
-import app.model.Model;
-import app.utils.Event;
-import executors.SourceAnalyzer;
+import app.gui.controller.Controller;
+import app.gui.model.Model;
+import app.gui.utils.Event;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Map;
 import java.util.Objects;
 
 import javax.swing.*;

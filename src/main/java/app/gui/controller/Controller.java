@@ -1,7 +1,7 @@
-package app.controller;
+package app.gui.controller;
 
-import app.model.Model;
-import app.utils.Event;
+import app.gui.model.Model;
+import app.gui.utils.Event;
 import executors.SourceAnalyzer;
 
 import javax.swing.*;

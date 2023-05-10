@@ -1,6 +1,5 @@
 package executors;
 
-import app.model.Model;
 import common.Pair;
 import common.Report;
 import executors.tasks.CountFileLinesTask;

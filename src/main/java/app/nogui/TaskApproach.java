@@ -1,6 +1,6 @@
-package app;
+package app.nogui;
 
-import app.model.Model;
+import app.gui.model.Model;
 import common.Chronometer;
 import common.Report;
 import executors.SourceAnalyzer;

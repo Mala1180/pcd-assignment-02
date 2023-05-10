@@ -1,8 +1,8 @@
-package app;
+package app.gui;
 
-import app.controller.Controller;
-import app.model.Model;
-import app.view.View;
+import app.gui.controller.Controller;
+import app.gui.model.Model;
+import app.gui.view.View;
 
 public class Main {
 
