@@ -9,22 +9,22 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.*;
 
-public class SourceAnalyser {
+public class SourceAnalyzer {
 
-    private static SourceAnalyser instance;
+    private static SourceAnalyzer instance;
     private Set<Path> files;
     private final Set<Pair<String, Integer>> computedFiles = new HashSet<>();
     private String path;
     private int intervals;
     private int maxLines;
 
-    private SourceAnalyser() {
+    private SourceAnalyzer() {
     }
 
-    public static SourceAnalyser getInstance() {
-        synchronized (SourceAnalyser.class) {
+    public static SourceAnalyzer getInstance() {
+        synchronized (SourceAnalyzer.class) {
             if (instance == null) {
-                instance = new SourceAnalyser();
+                instance = new SourceAnalyzer();
             }
         }
         return instance;
