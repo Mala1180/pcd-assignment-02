@@ -16,11 +16,9 @@ public class CountFileLinesTask implements Callable<Pair<String, Integer>> {
     }
 
     public Pair<String, Integer> call() {
-        try {
-            try (Stream<String> lines = Files.lines(file)) {
-                int countedLines = (int) lines.count();
-                return new Pair<>(file.getFileName().toString(), countedLines);
-            }
+        try (Stream<String> lines = Files.lines(file)) {
+            int countedLines = (int) lines.count();
+            return new Pair<>(file.getFileName().toString(), countedLines);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

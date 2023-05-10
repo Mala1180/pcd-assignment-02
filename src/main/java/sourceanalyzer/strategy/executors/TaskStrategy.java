@@ -14,7 +14,7 @@ import java.util.function.Function;
 public class TaskStrategy extends AbstractAnalyzerStrategy {
 
     public TaskStrategy(String path, int intervals, int maxLines, int topFilesNumber, Function<Pair<String, Integer>, Void> fileProcessedHandler) {
-        super(path,  intervals,  maxLines,  topFilesNumber, fileProcessedHandler);
+        super(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
             }
 
             ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;
-            threadPoolExecutor.getActiveCount();
+            System.out.println(threadPoolExecutor.getActiveCount());
             shutdownExecutor(executor);
             for (Future<Pair<String, Integer>> future : futures) {
                 Pair<String, Integer> pair = future.get();
