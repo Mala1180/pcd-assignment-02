@@ -13,14 +13,83 @@ import java.util.function.Function;
 
 public class TaskStrategy extends AbstractAnalyzerStrategy {
 
+    ExecutorService executor;
+
     public TaskStrategy(String path, int intervals, int maxLines, int topFilesNumber, Function<Pair<String, Integer>, Void> fileProcessedHandler) {
         super(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
     }
 
+    protected void setExecutor(ExecutorService executor) {
+        this.executor = executor;
+    }
+
     @Override
     public Report makeReport() {
+        this.setExecutor(Executors.newSingleThreadExecutor());
         this.readFiles();
+        this.setExecutor(Executors.newCachedThreadPool());
         this.countLines();
+        return createReport();
+    }
+
+    @Override
+    public void startAnalyzing() {
+        setExecutor(Executors.newSingleThreadExecutor());
+        this.readFiles();
+        setExecutor(Executors.newCachedThreadPool());
+        this.countLinesIncrementally();
+    }
+
+    protected void countLinesIncrementally() {
+        for (Path file : getFiles()) {
+            CompletableFuture<Pair<String, Integer>> completableFuture = new CompletableFuture<>();
+            completableFuture.whenComplete((fileComputed, throwable) -> getFileProcessedHandler().apply(fileComputed));
+            executor.submit(() -> completableFuture.complete(new CountFileLinesTask(file).call()));
+        }
+        try {
+            shutdownExecutor();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void stopAnalyzing() {
+    }
+
+    @Override
+    public void resumeAnalyzing() {
+
+    }
+
+    protected void readFiles() {
+        Future<Set<Path>> future = executor.submit(new ReadFilesTask(getPath()));
+        try {
+            setFiles(future.get());
+            shutdownExecutor();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    protected void countLines() {
+        Set<Future<Pair<String, Integer>>> futures = new HashSet<>();
+        for (Path file : getFiles()) {
+            futures.add(executor.submit(new CountFileLinesTask(file)));
+        }
+        try {
+            shutdownExecutor();
+            for (Future<Pair<String, Integer>> future : futures) {
+                Pair<String, Integer> pair = future.get();
+                getProcessedFiles().add(pair);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected Report createReport() {
         List<Pair<String, Integer>> longestFiles = getProcessedFiles().stream()
                 .sorted((o1, o2) -> o2.getSecond().compareTo(o1.getSecond()))
                 .limit(getTopFilesNumber()).toList();
@@ -40,63 +109,9 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
         return new Report(longestFiles, distributions);
     }
 
-    @Override
-    public void startAnalyzing() {
-        this.readFiles();
-        try (ExecutorService executor = Executors.newCachedThreadPool()) {
-            for (Path file : getFiles()) {
-                CompletableFuture<Pair<String, Integer>> completableFuture = new CompletableFuture<>();
-                completableFuture.whenComplete((fileComputed, throwable) -> getFileProcessedHandler().apply(fileComputed));
-                executor.submit(() -> completableFuture.complete(new CountFileLinesTask(file).call()));
-            }
-            shutdownExecutor(executor);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void stopAnalyzing() {
-    }
-
-    @Override
-    public void resumeAnalyzing() {
-
-    }
-
-    private void readFiles() {
-        try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
-            Future<Set<Path>> future = executor.submit(new ReadFilesTask(getPath()));
-            setFiles(future.get());
-            shutdownExecutor(executor);
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void countLines() {
-        try (ExecutorService executor = Executors.newCachedThreadPool()) {
-            Set<Future<Pair<String, Integer>>> futures = new HashSet<>();
-            for (Path file : getFiles()) {
-                futures.add(executor.submit(new CountFileLinesTask(file)));
-            }
-
-            ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;
-            System.out.println(threadPoolExecutor.getActiveCount());
-            shutdownExecutor(executor);
-            for (Future<Pair<String, Integer>> future : futures) {
-                Pair<String, Integer> pair = future.get();
-                getProcessedFiles().add(pair);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    private static void shutdownExecutor(ExecutorService executor) throws InterruptedException {
-        executor.shutdown();
-        boolean isTerminatedCorrectly = executor.awaitTermination(30, TimeUnit.SECONDS);
+    protected void shutdownExecutor() throws InterruptedException {
+        this.executor.shutdown();
+        boolean isTerminatedCorrectly = this.executor.awaitTermination(30, TimeUnit.SECONDS);
         if (!isTerminatedCorrectly) {
             throw new RuntimeException("Executor terminated with timeout");
         }

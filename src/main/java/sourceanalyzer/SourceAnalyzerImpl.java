@@ -5,6 +5,7 @@ import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AnalyzerStrategy;
 import sourceanalyzer.strategy.executors.TaskStrategy;
+import sourceanalyzer.strategy.virtualthreads.VirtualThreadStrategy;
 
 import java.util.function.Function;
 
@@ -30,7 +31,7 @@ public class SourceAnalyzerImpl implements SourceAnalyzer {
         switch (approach) {
             case TASK ->
                     analyzerStrategy = new TaskStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
-            case VIRTUAL_THREAD -> analyzerStrategy = null;
+            case VIRTUAL_THREAD -> analyzerStrategy = new VirtualThreadStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
             case ASYNC -> analyzerStrategy = null;
             case REACTIVE -> analyzerStrategy = null;
         }
