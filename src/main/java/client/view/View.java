@@ -13,7 +13,7 @@ public class View extends JFrame implements ActionListener {
     private final DefaultListModel<String> topFilesListModel = new DefaultListModel<>();
 
     private final JFileChooser chooser = new JFileChooser();
-    private final String[] approachChoice = new String[]{"Executor e Task", "Executor e Virtual Threads", "Vert.x e Eventi", "RxJava e Programmazione Reattiva"};
+    private final String[] approachChoice = new String[]{"Executor: approccio a Task", "Executor: Virtual Threads", "Vert.x: Eventi", "RxJava: Programmazione Reattiva"};
     private final JComboBox<String> approachCombo = new JComboBox<>(approachChoice);
 
     private final JTextField directoryTxt = new JTextField(20);
