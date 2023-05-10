@@ -1,4 +1,4 @@
-package client.view;
+package app.utils;
 
 public enum Event {
 
