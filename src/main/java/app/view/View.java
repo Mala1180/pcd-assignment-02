@@ -1,14 +1,23 @@
-package client.view;
+package app.view;
 
-import javax.swing.*;
+import app.controller.Controller;
+import app.model.Model;
+import app.utils.Event;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.Objects;
 
+import javax.swing.*;
+
 public class View extends JFrame implements ActionListener {
+    private final Controller controller;
     private final DefaultListModel<String> distributionListModel = new DefaultListModel<>();
     private final DefaultListModel<String> topFilesListModel = new DefaultListModel<>();
 
@@ -21,40 +30,36 @@ public class View extends JFrame implements ActionListener {
     private final JTextField maxLinesTxt = new JTextField(5);
 
 
-    public View() {
+    public View(Controller controller) {
         super("Line Counter");
+        this.controller = controller;
         setupGUI();
     }
 
     public void actionPerformed(ActionEvent ev) {
         try {
             switch (Event.valueOf(ev.getActionCommand())) {
-                case START:
+                case START -> {
                     if (!directoryTxt.getText().equals("")
                             && !Objects.equals(intervalsTxt.getText(), "")
                             && !Objects.equals(maxLinesTxt.getText(), "")
                             && Integer.parseInt(intervalsTxt.getText()) > 0
                             && Integer.parseInt(maxLinesTxt.getText()) > 0) {
-                        //controller.setParameters(directoryTxt.getText(), Integer.parseInt(intervalsTxt.getText()), Integer.parseInt(maxLinesTxt.getText()));
+                        controller.setParameters(directoryTxt.getText(), Integer.parseInt(intervalsTxt.getText()), Integer.parseInt(maxLinesTxt.getText()));
                     }
-                    break;
-                case SET_APPROACH:
-                    setApproach();
-                    break;
-                case RESET:
-                    resetParameters();
-                    break;
+                }
+                case SET_APPROACH -> setApproach();
+                case RESET -> resetParameters();
             }
-            //controller.processEvent(Event.valueOf(ev.getActionCommand()));
+            controller.processEvent(Event.valueOf(ev.getActionCommand()));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private void setApproach(){
+    private void setApproach() {
         System.out.println(approachCombo.getSelectedItem());
     }
-
 
 //    public void modelUpdated(Model model) {
 //        try {
@@ -201,6 +206,7 @@ public class View extends JFrame implements ActionListener {
     private void resetParameters() {
         distributionListModel.clear();
         topFilesListModel.clear();
+        controller.resetCounter();
         directoryTxt.setText("");
         intervalsTxt.setText("");
         maxLinesTxt.setText("");
