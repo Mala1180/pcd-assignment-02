@@ -10,7 +10,7 @@ public class Main {
         Model model = new Model();
         Controller controller = new Controller(model);
         View view = new View(controller);
-//        model.addObserver(view);
+        model.addObserver(view);
         view.setVisible(true);
     }
 

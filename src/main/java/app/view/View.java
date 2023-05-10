@@ -3,6 +3,7 @@ package app.view;
 import app.controller.Controller;
 import app.model.Model;
 import app.utils.Event;
+import executors.SourceAnalyzer;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,7 +17,7 @@ import java.util.Objects;
 
 import javax.swing.*;
 
-public class View extends JFrame implements ActionListener {
+public class View extends JFrame implements ActionListener, ModelObserver {
     private final Controller controller;
     private final DefaultListModel<String> distributionListModel = new DefaultListModel<>();
     private final DefaultListModel<String> topFilesListModel = new DefaultListModel<>();
@@ -31,7 +32,7 @@ public class View extends JFrame implements ActionListener {
 
 
     public View(Controller controller) {
-        super("Line Counter");
+        super("Source Analyzer");
         this.controller = controller;
         setupGUI();
     }
@@ -61,24 +62,25 @@ public class View extends JFrame implements ActionListener {
         System.out.println(approachCombo.getSelectedItem());
     }
 
-//    public void modelUpdated(Model model) {
-//        try {
-//            System.out.println("[View] model updated => updating the view");
-//            SwingUtilities.invokeLater(() -> {
-//                this.distributionListModel.clear();
-//                this.topFilesListModel.clear();
-//                model.getDistributions().forEach((k, v) -> {
-//                    this.distributionListModel.addElement(k + " " + v);
-//                });
-//                model.getTopFiles().entrySet()
-//                        .stream()
-//                        .sorted((a, b) -> b.getValue() - a.getValue())
-//                        .forEach(entry -> this.topFilesListModel.addElement(entry.getKey() + " " + entry.getValue()));
-//            });
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
+    @Override
+    public void modelUpdated(Model model) {
+        try {
+            System.out.println("[View] model updated => updating the view");
+            SwingUtilities.invokeLater(() -> {
+                this.distributionListModel.clear();
+                this.topFilesListModel.clear();
+                model.getDistributions().forEach((k, v) -> {
+                    this.distributionListModel.addElement(k + " " + v);
+                });
+                model.getTopFiles().entrySet()
+                        .stream()
+                        .sorted((a, b) -> b.getValue() - a.getValue())
+                        .forEach(entry -> this.topFilesListModel.addElement(entry.getKey() + " " + entry.getValue()));
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
 
     private void setupGUI() {

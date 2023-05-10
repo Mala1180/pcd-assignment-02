@@ -1,19 +1,17 @@
 package executors;
 
+import app.model.Model;
+import common.Pair;
 import common.Report;
 import executors.tasks.CountFileLinesTask;
-import common.Pair;
 import executors.tasks.ReadFilesTask;
 
-import javax.swing.*;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Function;
 
 public class SourceAnalyzer {
-
-    public static final int TOP_FILES_NUMBER = 5;
 
     private static SourceAnalyzer instance;
     private Function<Pair<String, Integer>, Void> fileProcessedHandler;
@@ -22,6 +20,7 @@ public class SourceAnalyzer {
     private String path;
     private int intervals;
     private int maxLines;
+    private int topFilesNumber;
 
     private SourceAnalyzer() {
     }
@@ -40,21 +39,22 @@ public class SourceAnalyzer {
         return instance;
     }
 
-    private void initializeFields(String path, int intervals, int maxLines) {
+    private void initializeFields(String path, int intervals, int maxLines, int topFilesNumber) {
         this.path = path;
         this.intervals = intervals;
         this.maxLines = maxLines;
+        this.topFilesNumber = topFilesNumber;
     }
 
-    public Report getReport(String path, int intervals, int maxLines) {
-        initializeFields(path, intervals, maxLines);
+    public Report getReport(String path, int intervals, int maxLines, int topFilesNumber) {
+        initializeFields(path, intervals, maxLines, topFilesNumber);
         this.readFiles();
         this.countLines();
         return this.makeReport();
     }
 
-    public void analyzeSources(String path, int intervals, int maxLines) {
-        initializeFields(path, intervals, maxLines);
+    public void analyzeSources(String path, int intervals, int maxLines, int topFilesNumber) {
+        initializeFields(path, intervals, maxLines, topFilesNumber);
         this.startAnalyzing();
         this.stopAnalyzing();
     }
@@ -96,6 +96,9 @@ public class SourceAnalyzer {
             for (Path file : this.files) {
                 futures.add(executor.submit(new CountFileLinesTask(file)));
             }
+
+            ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;
+            threadPoolExecutor.getActiveCount();
             shutdownExecutor(executor);
             for (Future<Pair<String, Integer>> future : futures) {
                 Pair<String, Integer> pair = future.get();
@@ -118,7 +121,7 @@ public class SourceAnalyzer {
     private Report makeReport() {
         List<Pair<String, Integer>> longestFiles = this.processedFiles.stream()
                 .sorted((o1, o2) -> o2.getSecond().compareTo(o1.getSecond()))
-                .limit(TOP_FILES_NUMBER).toList();
+                .limit(this.topFilesNumber).toList();
         Map<String, Integer> distributions = new HashMap<>();
         for (int i = 0; i < this.intervals; i++) {
             distributions.put("Interval " + (i + 1), 0);

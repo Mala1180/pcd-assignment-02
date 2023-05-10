@@ -45,7 +45,7 @@ public class Controller {
             });
             return null;
         });
-        sourceAnalyser.analyzeSources(model.getDirectoryPath(), model.getIntervals(), model.getMaxLines());
+        sourceAnalyser.analyzeSources(model.getDirectoryPath(), model.getIntervals(), model.getMaxLines(), Model.TOP_FILES_NUMBER);
     }
 
     private void stopCounting() {
