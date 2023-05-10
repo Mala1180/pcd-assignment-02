@@ -1,4 +1,4 @@
-package common;
+package sourceanalyzer.common;
 
 /**
  * A class used to enclose two objects.

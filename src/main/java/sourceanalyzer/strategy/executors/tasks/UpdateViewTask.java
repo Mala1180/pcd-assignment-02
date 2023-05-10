@@ -1,6 +1,6 @@
-package executors.tasks;
+package sourceanalyzer.strategy.executors.tasks;
 
-import common.Pair;
+import sourceanalyzer.common.Pair;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;

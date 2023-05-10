@@ -1,4 +1,4 @@
-package executors.tasks;
+package sourceanalyzer.strategy.executors.tasks;
 
 import java.io.IOException;
 import java.nio.file.Files;

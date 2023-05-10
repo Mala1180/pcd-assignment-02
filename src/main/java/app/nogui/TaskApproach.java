@@ -1,16 +1,18 @@
 package app.nogui;
 
 import app.gui.model.Model;
-import common.Chronometer;
-import common.Report;
-import executors.SourceAnalyzer;
+import app.gui.utils.Approach;
+import sourceanalyzer.common.Chronometer;
+import sourceanalyzer.common.Report;
+import sourceanalyzer.SourceAnalyzerImpl;
 
 public class TaskApproach {
 
     public static void main(String[] args) {
         Chronometer chronometer = new Chronometer();
         chronometer.start();
-        Report report = SourceAnalyzer.getInstance().getReport("src/main/java", 5, 1000, Model.TOP_FILES_NUMBER);
+        Report report = SourceAnalyzerImpl.getInstance().getReport(Approach.TASK, "src/main/java",
+                5, 1000, Model.TOP_FILES_NUMBER);
         chronometer.stop();
         System.out.println("Time elapsed: " + chronometer.getTime() + " ms");
         System.out.println("Longest files: " + report.getLongestFiles());

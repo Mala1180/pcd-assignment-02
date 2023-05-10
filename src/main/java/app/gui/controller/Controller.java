@@ -1,10 +1,9 @@
 package app.gui.controller;
 
 import app.gui.model.Model;
+import app.gui.utils.Approach;
 import app.gui.utils.Event;
-import executors.SourceAnalyzer;
-
-import javax.swing.*;
+import sourceanalyzer.SourceAnalyzerImpl;
 
 public class Controller {
 
@@ -14,8 +13,8 @@ public class Controller {
         this.model = model;
     }
 
-    public void setParameters(String path, Integer intervals, Integer maxLines) {
-        model.setParameters(path, intervals, maxLines);
+    public void setParameters(Approach approach, String path, Integer intervals, Integer maxLines) {
+        model.setParameters(approach, path, intervals, maxLines);
     }
 
     public void processEvent(Event event) {
@@ -38,25 +37,23 @@ public class Controller {
     }
 
     public void startCounting() {
-        SourceAnalyzer sourceAnalyser = SourceAnalyzer.getInstance();
-        sourceAnalyser.registerFileProcessedHandler((processedFile) -> {
-            SwingUtilities.invokeLater(() -> {
-
-            });
-            return null;
-        });
-        sourceAnalyser.analyzeSources(model.getDirectoryPath(), model.getIntervals(), model.getMaxLines(), Model.TOP_FILES_NUMBER);
+        SourceAnalyzerImpl sourceAnalyser = SourceAnalyzerImpl.getInstance();
+        sourceAnalyser.analyzeSources(model.getApproach(), model.getDirectoryPath(), model.getIntervals(), model.getMaxLines(),
+                Model.TOP_FILES_NUMBER, (processedFile) -> {
+                    model.updateCounter(processedFile.getFirst(), processedFile.getSecond());
+                    return null;
+                });
     }
 
     private void stopCounting() {
-        SourceAnalyzer.getInstance().stopAnalyzing();
+        SourceAnalyzerImpl.getInstance().stopAnalyzing();
     }
 
     public void resumeCounting() {
-        SourceAnalyzer.getInstance().resumeAnalyzing();
+        SourceAnalyzerImpl.getInstance().resumeAnalyzing();
     }
 
     public void resetCounter() {
-        setParameters("", 0, 0);
+        setParameters(model.getApproach(), "", 0, 0);
     }
 }

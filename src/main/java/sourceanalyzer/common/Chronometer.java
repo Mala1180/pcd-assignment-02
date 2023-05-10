@@ -1,4 +1,4 @@
-package common;
+package sourceanalyzer.common;
 
 public class Chronometer {
 

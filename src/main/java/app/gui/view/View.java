@@ -2,6 +2,7 @@ package app.gui.view;
 
 import app.gui.controller.Controller;
 import app.gui.model.Model;
+import app.gui.utils.Approach;
 import app.gui.utils.Event;
 
 import java.awt.*;
@@ -17,14 +18,18 @@ public class View extends JFrame implements ActionListener, ModelObserver {
     private final Controller controller;
     private final DefaultListModel<String> distributionListModel = new DefaultListModel<>();
     private final DefaultListModel<String> topFilesListModel = new DefaultListModel<>();
+    private final String[] approaches = new String[]{
+            Approach.TASK.getMessage(),
+            Approach.VIRTUAL_THREAD.getMessage(),
+            Approach.ASYNC.getMessage(),
+            Approach.REACTIVE.getMessage()
+    };
 
     private final JFileChooser chooser = new JFileChooser();
-    private final String[] approachChoice = new String[]{"Executor: approccio a Task", "Executor: Virtual Threads", "Vert.x: Eventi", "RxJava: Programmazione Reattiva"};
-    private final JComboBox<String> approachCombo = new JComboBox<>(approachChoice);
-
-    private final JTextField directoryTxt = new JTextField(20);
-    private final JTextField intervalsTxt = new JTextField(5);
-    private final JTextField maxLinesTxt = new JTextField(5);
+    private final JComboBox<String> approachCombo = new JComboBox<>(approaches);
+    private final JTextField directoryTxt = new JTextField("/Users/mattia/Desktop/Università/Triennale", 20);
+    private final JTextField intervalsTxt = new JTextField("5", 5);
+    private final JTextField maxLinesTxt = new JTextField("300", 5);
 
 
     public View(Controller controller) {
@@ -42,10 +47,10 @@ public class View extends JFrame implements ActionListener, ModelObserver {
                             && !Objects.equals(maxLinesTxt.getText(), "")
                             && Integer.parseInt(intervalsTxt.getText()) > 0
                             && Integer.parseInt(maxLinesTxt.getText()) > 0) {
-                        controller.setParameters(directoryTxt.getText(), Integer.parseInt(intervalsTxt.getText()), Integer.parseInt(maxLinesTxt.getText()));
+                        controller.setParameters(Approach.getByMessage((String) approachCombo.getSelectedItem()),
+                                directoryTxt.getText(), Integer.parseInt(intervalsTxt.getText()), Integer.parseInt(maxLinesTxt.getText()));
                     }
                 }
-                case SET_APPROACH -> setApproach();
                 case RESET -> resetParameters();
             }
             controller.processEvent(Event.valueOf(ev.getActionCommand()));
@@ -54,14 +59,9 @@ public class View extends JFrame implements ActionListener, ModelObserver {
         }
     }
 
-    private void setApproach() {
-        System.out.println(approachCombo.getSelectedItem());
-    }
-
     @Override
     public void modelUpdated(Model model) {
         try {
-            System.out.println("[View] model updated => updating the view");
             SwingUtilities.invokeLater(() -> {
                 this.distributionListModel.clear();
                 this.topFilesListModel.clear();
@@ -92,8 +92,6 @@ public class View extends JFrame implements ActionListener, ModelObserver {
         JLabel approachLabel = new JLabel("Seleziona approccio:");
         approachPanel.add(approachLabel);
         approachCombo.setSelectedIndex(0);
-        approachCombo.addActionListener(this);
-        approachCombo.setActionCommand(Event.SET_APPROACH.getCommand());
         approachPanel.add(approachCombo);
 
         JPanel dirPanel = new JPanel();

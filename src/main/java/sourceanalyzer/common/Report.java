@@ -1,4 +1,4 @@
-package common;
+package sourceanalyzer.common;
 
 import java.util.List;
 import java.util.Map;

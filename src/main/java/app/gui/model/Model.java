@@ -1,5 +1,6 @@
 package app.gui.model;
 
+import app.gui.utils.Approach;
 import app.gui.view.ModelObserver;
 
 import java.util.*;
@@ -8,12 +9,14 @@ public class Model {
 
     public static final int TOP_FILES_NUMBER = 5;
     private final List<ModelObserver> observers = new ArrayList<>();
+    private Approach approach;
     private String directoryPath;
     private Integer intervals;
     private Integer maxLines;
     private Monitor monitor;
 
-    public void setParameters(String directoryPath, Integer intervals, Integer maxLines) {
+    public void setParameters(Approach approach, String directoryPath, Integer intervals, Integer maxLines) {
+        this.approach = approach;
         this.directoryPath = directoryPath;
         this.intervals = intervals;
         this.maxLines = maxLines;
@@ -23,6 +26,10 @@ public class Model {
     public void updateCounter(String fileName, Integer lines) {
         this.monitor.updateDistributions(fileName, lines, intervals, maxLines);
         notifyObservers();
+    }
+
+    public Approach getApproach() {
+        return approach;
     }
 
     public String getDirectoryPath() {
@@ -54,4 +61,5 @@ public class Model {
     public Map<String, Integer> getTopFiles() {
         return this.monitor.getTopFiles();
     }
+
 }
