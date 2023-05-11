@@ -1,14 +1,15 @@
 package sourceanalyzer.strategy.events;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AbstractAnalyzerStrategy;
-import sourceanalyzer.strategy.events.codec.GenericCodec;
 
-import java.nio.file.Path;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 import java.util.function.Function;
 
 public class EventLoopStrategy extends AbstractAnalyzerStrategy {
@@ -29,14 +30,14 @@ public class EventLoopStrategy extends AbstractAnalyzerStrategy {
     @Override
     public void startAnalyzing() {
         EventBus eventBus = vertx.eventBus();
-        //eventBus.registerDefaultCodec(Path.class, new GenericCodec<>(Path.class));
-        Gson gson = new Gson();
-        eventBus.consumer("file-read", message -> {
-            Path file = gson.fromJson((String) message.body(), Path.class);
-            System.out.println("Count lines of " + file.getFileName());
-            //this.getVertx().eventBus().publish("file-processed", message.body());
+        eventBus.consumer("file-processed", message -> {
+            System.out.println("Received: " + message.body());
+            Gson gson = new Gson();
+            Type pairType = new TypeToken<Pair<String, Integer>>() {
+            }.getType();
+            Pair<String, Integer> processedFile = gson.fromJson(message.body().toString(), pairType);
+            super.getFileProcessedHandler().apply(processedFile);
         });
-
         vertx.deployVerticle(new ReadFileVerticle(super.getPath()));
 
     }

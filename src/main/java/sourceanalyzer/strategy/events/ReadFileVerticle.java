@@ -19,10 +19,9 @@ public class ReadFileVerticle extends AbstractVerticle {
     public void start() {
         System.out.println("Read files");
         Set<Path> files = Utils.readFiles(this.directoryPath);
-        Gson gson = new Gson();
         for (Path file : files) {
-            System.out.println(gson.toJson(file));
-            this.getVertx().eventBus().publish("file-read", gson.toJson(file));
+            System.out.println(file.toFile().getAbsoluteFile());
+            this.getVertx().deployVerticle(new CountFileLinesVerticle(file.toFile().getAbsoluteFile().toString()));
         }
 
     }
