@@ -1,5 +1,6 @@
 package sourceanalyzer.strategy.events;
 
+import com.google.gson.Gson;
 import io.vertx.core.AbstractVerticle;
 import sourceanalyzer.common.Utils;
 
@@ -18,9 +19,10 @@ public class ReadFileVerticle extends AbstractVerticle {
     public void start() {
         System.out.println("Read files");
         Set<Path> files = Utils.readFiles(this.directoryPath);
+        Gson gson = new Gson();
         for (Path file : files) {
-            System.out.println(file.getFileName().toString());
-            this.getVertx().eventBus().publish("file-read", file);
+            System.out.println(gson.toJson(file));
+            this.getVertx().eventBus().publish("file-read", gson.toJson(file));
         }
 
     }

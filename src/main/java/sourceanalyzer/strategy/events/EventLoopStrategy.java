@@ -1,5 +1,6 @@
 package sourceanalyzer.strategy.events;
 
+import com.google.gson.Gson;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 import sourceanalyzer.common.Pair;
@@ -28,10 +29,11 @@ public class EventLoopStrategy extends AbstractAnalyzerStrategy {
     @Override
     public void startAnalyzing() {
         EventBus eventBus = vertx.eventBus();
-        eventBus.registerDefaultCodec(Path.class, new GenericCodec<>(Path.class));
-
-        eventBus.<Path>consumer("file-read", message -> {
-            System.out.println("Count lines of " + message.body().getFileName().toString());
+        //eventBus.registerDefaultCodec(Path.class, new GenericCodec<>(Path.class));
+        Gson gson = new Gson();
+        eventBus.consumer("file-read", message -> {
+            Path file = gson.fromJson((String) message.body(), Path.class);
+            System.out.println("Count lines of " + file.getFileName());
             //this.getVertx().eventBus().publish("file-processed", message.body());
         });
 
