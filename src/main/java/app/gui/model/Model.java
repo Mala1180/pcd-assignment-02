@@ -2,6 +2,7 @@ package app.gui.model;
 
 import app.gui.utils.Approach;
 import app.gui.view.ModelObserver;
+import sourceanalyzer.common.ModelData;
 
 import java.util.*;
 
@@ -13,18 +14,25 @@ public class Model {
     private String directoryPath;
     private Integer intervals;
     private Integer maxLines;
+
+    private ModelData modelData;
     private Monitor monitor;
 
     public void setParameters(Approach approach, String directoryPath, Integer intervals, Integer maxLines) {
+        this.modelData = new ModelData(intervals);
         this.approach = approach;
         this.directoryPath = directoryPath;
         this.intervals = intervals;
         this.maxLines = maxLines;
-        this.monitor = new Monitor(intervals);
+        this.monitor = new Monitor(modelData);
     }
 
-    public void updateCounter(String fileName, Integer lines) {
-        this.monitor.updateDistributions(fileName, lines, intervals, maxLines);
+    public void updateData(String fileName, Integer lines) {
+        switch (approach) {
+            case EVENTS, REACTIVE -> this.modelData.updateDistributions(fileName, lines, intervals, maxLines);
+            case TASK, VIRTUAL_THREAD -> this.monitor.updateDistributions(fileName, lines, intervals, maxLines);
+            default -> throw new IllegalStateException("Unexpected value: " + approach);
+        }
         notifyObservers();
     }
 
@@ -55,11 +63,27 @@ public class Model {
     }
 
     public Map<String, Integer> getDistributions() {
-        return this.monitor.getDistributions();
+        switch (approach) {
+            case EVENTS, REACTIVE -> {
+                return this.modelData.getDistributions();
+            }
+            case TASK, VIRTUAL_THREAD -> {
+                return this.monitor.getDistributions();
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + approach);
+        }
     }
 
     public Map<String, Integer> getTopFiles() {
-        return this.monitor.getTopFiles();
+        switch (approach) {
+            case EVENTS, REACTIVE -> {
+                return this.modelData.getTopFiles();
+            }
+            case TASK, VIRTUAL_THREAD -> {
+                return this.monitor.getTopFiles();
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + approach);
+        }
     }
 
 }

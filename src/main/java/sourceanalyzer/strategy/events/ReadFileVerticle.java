@@ -19,8 +19,10 @@ public class ReadFileVerticle extends AbstractVerticle {
         System.out.println("Read files");
         Set<Path> files = Utils.readFiles(this.directoryPath);
         for (Path file : files) {
-            vertx.deployVerticle(new CountFileLinesVerticle(file));
+            System.out.println(file.getFileName().toString());
+            this.getVertx().eventBus().publish("file-read", file);
         }
+
     }
 
 }

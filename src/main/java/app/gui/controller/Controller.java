@@ -40,7 +40,7 @@ public class Controller {
         SourceAnalyzerImpl sourceAnalyser = SourceAnalyzerImpl.getInstance();
         sourceAnalyser.analyzeSources(model.getApproach(), model.getDirectoryPath(), model.getIntervals(), model.getMaxLines(),
                 Model.TOP_FILES_NUMBER, (processedFile) -> {
-                    model.updateCounter(processedFile.getFirst(), processedFile.getSecond());
+                    model.updateData(processedFile.getFirst(), processedFile.getSecond());
                     return null;
                 });
     }
