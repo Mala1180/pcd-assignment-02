@@ -26,4 +26,13 @@ public class Utils {
         }
         return files;
     }
+
+    public static Pair<String, Integer> countLines(Path file) {
+        try (Stream<String> lines = Files.lines(file)) {
+            int countedLines = (int) lines.count();
+            return new Pair<>(file.getFileName().toString(), countedLines);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
