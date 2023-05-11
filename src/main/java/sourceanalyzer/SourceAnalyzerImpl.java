@@ -4,6 +4,7 @@ import app.gui.utils.Approach;
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AnalyzerStrategy;
+import sourceanalyzer.strategy.events.EventLoopStrategy;
 import sourceanalyzer.strategy.executors.TaskStrategy;
 import sourceanalyzer.strategy.virtualthreads.VirtualThreadStrategy;
 
@@ -32,7 +33,7 @@ public class SourceAnalyzerImpl implements SourceAnalyzer {
             case TASK ->
                     analyzerStrategy = new TaskStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
             case VIRTUAL_THREAD -> analyzerStrategy = new VirtualThreadStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
-            case ASYNC -> analyzerStrategy = null;
+            case EVENTS -> analyzerStrategy = new EventLoopStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
             case REACTIVE -> analyzerStrategy = null;
         }
     }

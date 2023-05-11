@@ -1,5 +1,7 @@
 package sourceanalyzer.strategy.executors.tasks;
 
+import sourceanalyzer.common.Utils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,16 +21,7 @@ public class ReadFilesTask implements Callable<Set<Path>> {
 
     @Override
     public Set<Path> call() {
-        if (this.directoryPath == null) {
-            throw new IllegalArgumentException("Directory path cannot be null");
-        }
-        Set<Path> files;
-        try (Stream<Path> stream = Files.find(Paths.get(this.directoryPath), Integer.MAX_VALUE, (filePath, fileAttr) -> fileAttr.isRegularFile())) {
-            files = stream.filter(file -> file.toString().endsWith(".java")).collect(toSet());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return files;
+        return Utils.readFiles(this.directoryPath);
     }
 
 }
