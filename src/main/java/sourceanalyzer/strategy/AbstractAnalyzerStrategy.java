@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 public abstract class AbstractAnalyzerStrategy implements AnalyzerStrategy {
     private Set<Path> files = new HashSet<>();
-    private final Set<Pair<String, Integer>> processedFiles = new HashSet<>();
+    private Set<Pair<String, Integer>> processedFiles = new HashSet<>();
     private String path;
     private int intervals;
     private int maxLines;
@@ -35,6 +35,10 @@ public abstract class AbstractAnalyzerStrategy implements AnalyzerStrategy {
 
     public Set<Pair<String, Integer>> getProcessedFiles() {
         return processedFiles;
+    }
+
+    public void setProcessedFiles(Set<Pair<String, Integer>> processedFiles) {
+        this.processedFiles = processedFiles;
     }
 
     public String getPath() {

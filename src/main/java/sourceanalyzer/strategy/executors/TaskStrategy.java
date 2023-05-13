@@ -70,7 +70,6 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     protected void countLines() {
