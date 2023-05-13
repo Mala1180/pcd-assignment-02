@@ -1,4 +1,4 @@
-package sourceanalyzer.strategy.events;
+package sourceanalyzer.strategy.events.actors;
 
 import com.google.gson.Gson;
 import io.vertx.core.AbstractVerticle;

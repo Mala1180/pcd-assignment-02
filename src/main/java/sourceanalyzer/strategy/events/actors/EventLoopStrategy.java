@@ -1,4 +1,4 @@
-package sourceanalyzer.strategy.events;
+package sourceanalyzer.strategy.events.actors;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -8,7 +8,6 @@ import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AbstractAnalyzerStrategy;
 
-import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.function.Function;
 
@@ -33,8 +32,7 @@ public class EventLoopStrategy extends AbstractAnalyzerStrategy {
         eventBus.consumer("file-processed", message -> {
             System.out.println("Received: " + message.body());
             Gson gson = new Gson();
-            Type pairType = new TypeToken<Pair<String, Integer>>() {
-            }.getType();
+            Type pairType = new TypeToken<Pair<String, Integer>>() {}.getType();
             Pair<String, Integer> processedFile = gson.fromJson(message.body().toString(), pairType);
             super.getFileProcessedHandler().apply(processedFile);
         });

@@ -29,7 +29,7 @@ public class Model {
 
     public void updateData(String fileName, Integer lines) {
         switch (approach) {
-            case EVENTS, REACTIVE -> this.modelData.updateDistributions(fileName, lines, intervals, maxLines);
+            case EVENTS, ASYNC_EVENTS, REACTIVE -> this.modelData.updateDistributions(fileName, lines, intervals, maxLines);
             case TASK, VIRTUAL_THREAD -> this.monitor.updateDistributions(fileName, lines, intervals, maxLines);
             default -> throw new IllegalStateException("Unexpected value: " + approach);
         }
@@ -64,7 +64,7 @@ public class Model {
 
     public Map<String, Integer> getDistributions() {
         switch (approach) {
-            case EVENTS, REACTIVE -> {
+            case EVENTS, ASYNC_EVENTS, REACTIVE -> {
                 return this.modelData.getDistributions();
             }
             case TASK, VIRTUAL_THREAD -> {
@@ -76,7 +76,7 @@ public class Model {
 
     public Map<String, Integer> getTopFiles() {
         switch (approach) {
-            case EVENTS, REACTIVE -> {
+            case EVENTS, ASYNC_EVENTS, REACTIVE -> {
                 return this.modelData.getTopFiles();
             }
             case TASK, VIRTUAL_THREAD -> {

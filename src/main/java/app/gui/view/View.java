@@ -22,6 +22,7 @@ public class View extends JFrame implements ActionListener, ModelObserver {
             Approach.TASK.getMessage(),
             Approach.VIRTUAL_THREAD.getMessage(),
             Approach.EVENTS.getMessage(),
+            Approach.ASYNC_EVENTS.getMessage(),
             Approach.REACTIVE.getMessage()
     };
 

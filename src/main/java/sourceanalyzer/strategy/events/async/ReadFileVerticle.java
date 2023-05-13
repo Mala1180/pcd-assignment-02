@@ -1,6 +1,5 @@
-package sourceanalyzer.strategy.events;
+package sourceanalyzer.strategy.events.async;
 
-import com.google.gson.Gson;
 import io.vertx.core.AbstractVerticle;
 import sourceanalyzer.common.Utils;
 
@@ -21,7 +20,7 @@ public class ReadFileVerticle extends AbstractVerticle {
         Set<Path> files = Utils.readFiles(this.directoryPath);
         for (Path file : files) {
             System.out.println(file.toFile().getAbsoluteFile());
-            this.getVertx().deployVerticle(new CountFileLinesVerticle(file.toFile().getAbsoluteFile().toString()));
+            this.getVertx().deployVerticle(new AsyncVerticle(file.toFile().getAbsoluteFile().toString()));
         }
 
     }

@@ -1,4 +1,4 @@
-package sourceanalyzer.strategy.events.codec;
+package sourceanalyzer.strategy.events.actors.codec;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
