@@ -1,16 +1,10 @@
-package sourceanalyzer.strategy.events.async;
+package sourceanalyzer.strategy.events.futures;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.EventBus;
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AbstractAnalyzerStrategy;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,11 +36,6 @@ public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
 
     @Override
     public void stopAnalyzing() {
-
-    }
-
-    @Override
-    public void resumeAnalyzing() {
 
     }
 

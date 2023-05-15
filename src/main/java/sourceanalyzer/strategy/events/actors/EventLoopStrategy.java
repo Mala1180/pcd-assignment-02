@@ -45,8 +45,4 @@ public class EventLoopStrategy extends AbstractAnalyzerStrategy {
 
     }
 
-    @Override
-    public void resumeAnalyzing() {
-
-    }
 }
