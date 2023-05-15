@@ -24,7 +24,6 @@ public class Controller {
                     switch (event) {
                         case START -> startCounting();
                         case STOP -> stopCounting();
-                        case RESET -> resetCounter();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -49,11 +48,4 @@ public class Controller {
         SourceAnalyzerImpl.getInstance().stopAnalyzing();
     }
 
-    public void resumeCounting() {
-        SourceAnalyzerImpl.getInstance().resumeAnalyzing();
-    }
-
-    public void resetCounter() {
-        setParameters(model.getApproach(), "", 0, 0);
-    }
 }

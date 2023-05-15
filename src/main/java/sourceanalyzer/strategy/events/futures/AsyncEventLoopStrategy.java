@@ -1,22 +1,20 @@
-package sourceanalyzer.strategy.events.async;
+package sourceanalyzer.strategy.events.futures;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.EventBus;
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AbstractAnalyzerStrategy;
 
-import java.lang.reflect.Type;
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
 
     private final Vertx vertx;
-    private final AsyncVerticle verticle = new AsyncVerticle( super.getPath(), super.getFileProcessedHandler());
+    private final AsyncVerticle verticle = new AsyncVerticle(super.getPath(), super.getFileProcessedHandler());
 
 
     public AsyncEventLoopStrategy(String path, int intervals, int maxLines, int topFilesNumber,
@@ -46,11 +44,6 @@ public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
     @Override
     public void stopAnalyzing() {
         verticle.stop();
-    }
-
-    @Override
-    public void resumeAnalyzing() {
-
     }
 
     protected Report createReport() {

@@ -5,7 +5,7 @@ import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AnalyzerStrategy;
 import sourceanalyzer.strategy.events.actors.EventLoopStrategy;
-import sourceanalyzer.strategy.events.async.AsyncEventLoopStrategy;
+import sourceanalyzer.strategy.events.futures.AsyncEventLoopStrategy;
 import sourceanalyzer.strategy.executors.TaskStrategy;
 import sourceanalyzer.strategy.virtualthreads.VirtualThreadStrategy;
 
@@ -57,11 +57,6 @@ public class SourceAnalyzerImpl implements SourceAnalyzer {
     @Override
     public void stopAnalyzing() {
         analyzerStrategy.stopAnalyzing();
-    }
-
-    @Override
-    public void resumeAnalyzing() {
-        analyzerStrategy.resumeAnalyzing();
     }
 
 }

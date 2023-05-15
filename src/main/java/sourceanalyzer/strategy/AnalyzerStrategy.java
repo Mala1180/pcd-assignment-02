@@ -10,6 +10,4 @@ public interface AnalyzerStrategy {
 
     void stopAnalyzing();
 
-    void resumeAnalyzing();
-
 }

@@ -13,7 +13,9 @@ import java.util.function.Function;
 
 public class TaskStrategy extends AbstractAnalyzerStrategy {
 
-    ExecutorService executor;
+    private ExecutorService executor;
+    private Future<Set<Path>> readFilesFuture;
+    private Set<Future<Pair<String, Integer>>> countLinesFuture;
 
     public TaskStrategy(String path, int intervals, int maxLines, int topFilesNumber, Function<Pair<String, Integer>, Void> fileProcessedHandler) {
         super(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
@@ -55,17 +57,23 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
 
     @Override
     public void stopAnalyzing() {
+        this.executor.shutdownNow();
+        this.readFilesFuture.cancel(true);
+        for (Future<Pair<String, Integer>> task : this.countLinesFuture) {
+            task.cancel(true);
+        }
+        try {
+            this.shutdownExecutor();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @Override
-    public void resumeAnalyzing() {
-
-    }
 
     protected void readFiles() {
-        Future<Set<Path>> future = executor.submit(new ReadFilesTask(getPath()));
+        this.readFilesFuture = executor.submit(new ReadFilesTask(getPath()));
         try {
-            setFiles(future.get());
+            setFiles(readFilesFuture.get());
             shutdownExecutor();
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
@@ -73,13 +81,13 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
     }
 
     protected void countLines() {
-        Set<Future<Pair<String, Integer>>> futures = new HashSet<>();
+        this.countLinesFuture = new HashSet<>();
         for (Path file : getFiles()) {
-            futures.add(executor.submit(new CountFileLinesTask(file)));
+            countLinesFuture.add(executor.submit(new CountFileLinesTask(file)));
         }
         try {
             shutdownExecutor();
-            for (Future<Pair<String, Integer>> future : futures) {
+            for (Future<Pair<String, Integer>> future : countLinesFuture) {
                 Pair<String, Integer> pair = future.get();
                 getProcessedFiles().add(pair);
             }

@@ -1,4 +1,4 @@
-package sourceanalyzer.strategy.events.async;
+package sourceanalyzer.strategy.events.futures;
 
 import io.vertx.core.*;
 import sourceanalyzer.common.Pair;
@@ -59,9 +59,9 @@ public class AsyncVerticle extends AbstractVerticle {
         });
     }
 
-    protected void countLines(Future<Set<Path>> fileReaded) {
+    protected void countLines(Future<Set<Path>> filesRead) {
         List<Future> futures = new ArrayList<>();
-        fileReaded.onComplete((AsyncResult<Set<Path>> files) -> {
+        filesRead.onComplete((AsyncResult<Set<Path>> files) -> {
             files.result().forEach(file -> {
                 Future<Pair<String, Integer>> future = this.getVertx().executeBlocking(promise -> {
                     try {
@@ -78,8 +78,8 @@ public class AsyncVerticle extends AbstractVerticle {
         });
     }
 
-    protected void countLinesIncrementally(Future<Set<Path>> fileReaded) {
-        fileReaded.onComplete((AsyncResult<Set<Path>> files) -> {
+    protected void countLinesIncrementally(Future<Set<Path>> filesRead) {
+        filesRead.onComplete((AsyncResult<Set<Path>> files) -> {
             files.result().forEach(file -> {
                 CompletableFuture<Pair<String, Integer>> completableFuture = new CompletableFuture<>();
                 completableFuture.complete(Utils.countLines(file));

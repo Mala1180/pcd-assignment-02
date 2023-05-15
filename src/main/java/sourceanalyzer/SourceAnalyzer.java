@@ -15,5 +15,4 @@ public interface SourceAnalyzer {
 
     void stopAnalyzing();
 
-    void resumeAnalyzing();
 }
