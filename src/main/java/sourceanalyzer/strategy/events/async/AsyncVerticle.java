@@ -12,16 +12,23 @@ import java.util.function.Function;
 
 public class AsyncVerticle extends AbstractVerticle {
 
-    private final boolean incrementally;
+    private boolean incrementally;
     private final String directoryPath;
     private final Function<Pair<String, Integer>, Void> fileProcessedHandler;
-    private final Function<Set<Pair<String, Integer>>, Report> reportHandler;
+    private Function<Set<Pair<String, Integer>>, Report> reportHandler;
+    private final Set<CompletableFuture<Pair<String, Integer>>> completableFutures = new HashSet<>();
 
-    public AsyncVerticle(Boolean incrementally, String directoryPath, Function<Pair<String, Integer>, Void> fileProcessedHandler, Function<Set<Pair<String, Integer>>, Report> reportHandler) {
-        this.incrementally = incrementally;
+    public AsyncVerticle(String directoryPath, Function<Pair<String, Integer>, Void> fileProcessedHandler) {
         this.directoryPath = directoryPath;
         this.fileProcessedHandler = fileProcessedHandler;
+    }
+
+    public void setReportHandler(Function<Set<Pair<String, Integer>>, Report> reportHandler) {
         this.reportHandler = reportHandler;
+    }
+
+    public void setIncrementally(Boolean incrementally) {
+        this.incrementally = incrementally;
     }
 
     @Override
@@ -31,6 +38,13 @@ public class AsyncVerticle extends AbstractVerticle {
         } else {
             this.countLines(this.readFiles());
         }
+    }
+
+    @Override
+    public void stop() {
+        completableFutures.forEach(completableFuture -> {
+            completableFuture.cancel(true);
+        });
     }
 
     protected Future<Set<Path>> readFiles() {
@@ -70,6 +84,7 @@ public class AsyncVerticle extends AbstractVerticle {
                 CompletableFuture<Pair<String, Integer>> completableFuture = new CompletableFuture<>();
                 completableFuture.complete(Utils.countLines(file));
                 completableFuture.whenComplete((fileComputed, throwable) -> this.fileProcessedHandler.apply(fileComputed));
+                completableFutures.add(completableFuture);
             });
         });
     }

@@ -10,15 +10,14 @@ import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AbstractAnalyzerStrategy;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
 
     private final Vertx vertx;
+    private final AsyncVerticle verticle = new AsyncVerticle( super.getPath(), super.getFileProcessedHandler());
+
 
     public AsyncEventLoopStrategy(String path, int intervals, int maxLines, int topFilesNumber,
                                   Function<Pair<String, Integer>, Void> fileProcessedHandler) {
@@ -28,21 +27,25 @@ public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
 
     @Override
     public Report makeReport() {
-        vertx.deployVerticle(new AsyncVerticle(false, super.getPath(), super.getFileProcessedHandler(), (processedFiles) -> {
+        verticle.setIncrementally(false);
+        verticle.setReportHandler((processedFiles) -> {
             super.setProcessedFiles(processedFiles);
+            //return this.createReport();
             return null;
-        }));
+        });
+        vertx.deployVerticle(verticle);
         return this.createReport();
     }
 
     @Override
     public void startAnalyzing() {
-        vertx.deployVerticle(new AsyncVerticle(true, super.getPath(), super.getFileProcessedHandler(), (processedFiles) -> null));
+        verticle.setIncrementally(true);
+        vertx.deployVerticle(verticle);
     }
 
     @Override
     public void stopAnalyzing() {
-
+        verticle.stop();
     }
 
     @Override
