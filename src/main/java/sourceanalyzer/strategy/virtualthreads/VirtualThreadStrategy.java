@@ -27,6 +27,6 @@ public class VirtualThreadStrategy extends TaskStrategy {
         this.readFiles();
         this.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
         this.countLines();
-        return createReport();
+        return super.createReport();
     }
 }

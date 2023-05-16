@@ -5,11 +5,6 @@ import io.vertx.core.Vertx;
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AbstractAnalyzerStrategy;
-
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
@@ -29,11 +24,10 @@ public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
         verticle.setIncrementally(false);
         verticle.setReportHandler((processedFiles) -> {
             super.setProcessedFiles(processedFiles);
-            //return this.createReport();
             return null;
         });
         vertx.deployVerticle(verticle);
-        return this.createReport();
+        return super.createReport();
     }
 
     @Override
@@ -47,23 +41,4 @@ public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
         vertx.undeploy(verticle.deploymentID());
     }
 
-    protected Report createReport() {
-        List<Pair<String, Integer>> longestFiles = getProcessedFiles().stream()
-                .sorted((o1, o2) -> o2.getSecond().compareTo(o1.getSecond()))
-                .limit(getTopFilesNumber()).toList();
-        Map<String, Integer> distributions = new HashMap<>();
-        for (int i = 0; i < getIntervals(); i++) {
-            distributions.put("Interval " + (i + 1), 0);
-        }
-        int linesPerInterval = getMaxLines() / (getIntervals() - 1);
-        for (var file : this.getProcessedFiles()) {
-            int index = file.getSecond() / linesPerInterval;
-            if (index >= getIntervals()) {
-                index = getIntervals() - 1;
-            }
-            String key = "Interval " + (index + 1);
-            distributions.put(key, distributions.get(key) + 1);
-        }
-        return new Report(longestFiles, distributions);
-    }
 }

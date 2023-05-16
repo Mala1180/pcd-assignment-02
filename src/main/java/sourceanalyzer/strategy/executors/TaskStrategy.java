@@ -31,7 +31,7 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
         this.readFiles();
         this.setExecutor(Executors.newCachedThreadPool());
         this.countLines();
-        return createReport();
+        return super.createReport();
     }
 
     @Override
@@ -94,26 +94,6 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    protected Report createReport() {
-        List<Pair<String, Integer>> longestFiles = getProcessedFiles().stream()
-                .sorted((o1, o2) -> o2.getSecond().compareTo(o1.getSecond()))
-                .limit(getTopFilesNumber()).toList();
-        Map<String, Integer> distributions = new HashMap<>();
-        for (int i = 0; i < getIntervals(); i++) {
-            distributions.put("Interval " + (i + 1), 0);
-        }
-        int linesPerInterval = getMaxLines() / (getIntervals() - 1);
-        for (var file : this.getProcessedFiles()) {
-            int index = file.getSecond() / linesPerInterval;
-            if (index >= getIntervals()) {
-                index = getIntervals() - 1;
-            }
-            String key = "Interval " + (index + 1);
-            distributions.put(key, distributions.get(key) + 1);
-        }
-        return new Report(longestFiles, distributions);
     }
 
     protected void shutdownExecutor() throws InterruptedException {

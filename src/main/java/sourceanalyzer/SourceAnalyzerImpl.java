@@ -7,6 +7,7 @@ import sourceanalyzer.strategy.AnalyzerStrategy;
 import sourceanalyzer.strategy.events.actors.EventLoopStrategy;
 import sourceanalyzer.strategy.events.futures.AsyncEventLoopStrategy;
 import sourceanalyzer.strategy.executors.TaskStrategy;
+import sourceanalyzer.strategy.reactive.ReactiveStrategy;
 import sourceanalyzer.strategy.virtualthreads.VirtualThreadStrategy;
 
 import java.util.function.Function;
@@ -36,7 +37,7 @@ public class SourceAnalyzerImpl implements SourceAnalyzer {
             case VIRTUAL_THREAD -> analyzerStrategy = new VirtualThreadStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
             case EVENTS -> analyzerStrategy = new EventLoopStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
             case ASYNC_EVENTS -> analyzerStrategy = new AsyncEventLoopStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
-            case REACTIVE -> analyzerStrategy = null;
+            case REACTIVE -> analyzerStrategy = new ReactiveStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
         }
     }
 
