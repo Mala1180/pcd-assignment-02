@@ -2,7 +2,7 @@ package sourceanalyzer.strategy.virtualthreads;
 
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
-import sourceanalyzer.strategy.executors.TaskStrategy;
+import sourceanalyzer.strategy.tasks.TaskStrategy;
 
 import java.util.concurrent.*;
 import java.util.function.Function;

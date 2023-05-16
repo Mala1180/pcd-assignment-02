@@ -1,4 +1,4 @@
-package sourceanalyzer.strategy.executors.tasks;
+package sourceanalyzer.strategy.tasks;
 
 import sourceanalyzer.common.Utils;
 

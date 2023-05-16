@@ -1,10 +1,8 @@
-package sourceanalyzer.strategy.executors;
+package sourceanalyzer.strategy.tasks;
 
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AbstractAnalyzerStrategy;
-import sourceanalyzer.strategy.executors.tasks.CountFileLinesTask;
-import sourceanalyzer.strategy.executors.tasks.ReadFilesTask;
 
 import java.nio.file.Path;
 import java.util.*;

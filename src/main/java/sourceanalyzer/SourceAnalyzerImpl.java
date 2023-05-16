@@ -6,7 +6,7 @@ import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AnalyzerStrategy;
 import sourceanalyzer.strategy.events.actors.ActorStrategy;
 import sourceanalyzer.strategy.events.futures.EventStrategy;
-import sourceanalyzer.strategy.executors.TaskStrategy;
+import sourceanalyzer.strategy.tasks.TaskStrategy;
 import sourceanalyzer.strategy.reactive.ReactiveStrategy;
 import sourceanalyzer.strategy.virtualthreads.VirtualThreadStrategy;
 
