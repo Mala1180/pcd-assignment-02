@@ -11,12 +11,12 @@ import sourceanalyzer.strategy.AbstractAnalyzerStrategy;
 import java.lang.reflect.Type;
 import java.util.function.Function;
 
-public class EventLoopStrategy extends AbstractAnalyzerStrategy {
+public class ActorStrategy extends AbstractAnalyzerStrategy {
 
     private final Vertx vertx;
 
-    public EventLoopStrategy(String path, int intervals, int maxLines, int topFilesNumber,
-                             Function<Pair<String, Integer>, Void> fileProcessedHandler) {
+    public ActorStrategy(String path, int intervals, int maxLines, int topFilesNumber,
+                         Function<Pair<String, Integer>, Void> fileProcessedHandler) {
         super(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
         vertx = Vertx.vertx();
     }

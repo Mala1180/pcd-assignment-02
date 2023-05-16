@@ -6,8 +6,8 @@ public enum Approach {
 
     TASK("Task approach with executors"),
     VIRTUAL_THREAD("Virtual thread approach with executors"),
-    EVENTS("Actor Events approach"),
-    ASYNC_EVENTS("Async Events approach"),
+    ACTORS("Actors-like approach"),
+    EVENTS("Events approach"),
     REACTIVE("Reactive approach");
 
     private final String message;

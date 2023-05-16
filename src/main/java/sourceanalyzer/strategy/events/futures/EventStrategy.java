@@ -9,14 +9,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
-public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
+public class EventStrategy extends AbstractAnalyzerStrategy {
 
     private final Vertx vertx;
     private final AsyncVerticle verticle = new AsyncVerticle(super.getPath(), super.getFileProcessedHandler());
 
 
-    public AsyncEventLoopStrategy(String path, int intervals, int maxLines, int topFilesNumber,
-                                  Function<Pair<String, Integer>, Void> fileProcessedHandler) {
+    public EventStrategy(String path, int intervals, int maxLines, int topFilesNumber,
+                         Function<Pair<String, Integer>, Void> fileProcessedHandler) {
         super(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
         vertx = Vertx.vertx();
     }

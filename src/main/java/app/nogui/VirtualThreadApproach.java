@@ -6,7 +6,7 @@ import sourceanalyzer.SourceAnalyzerImpl;
 import sourceanalyzer.common.Chronometer;
 import sourceanalyzer.common.Report;
 
-public class VirtualThreadsApproach {
+public class VirtualThreadApproach {
 
     public static void main(String[] args) {
         Chronometer chronometer = new Chronometer();

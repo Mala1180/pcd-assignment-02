@@ -4,8 +4,8 @@ import app.gui.utils.Approach;
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AnalyzerStrategy;
-import sourceanalyzer.strategy.events.actors.EventLoopStrategy;
-import sourceanalyzer.strategy.events.futures.AsyncEventLoopStrategy;
+import sourceanalyzer.strategy.events.actors.ActorStrategy;
+import sourceanalyzer.strategy.events.futures.EventStrategy;
 import sourceanalyzer.strategy.executors.TaskStrategy;
 import sourceanalyzer.strategy.reactive.ReactiveStrategy;
 import sourceanalyzer.strategy.virtualthreads.VirtualThreadStrategy;
@@ -35,8 +35,8 @@ public class SourceAnalyzerImpl implements SourceAnalyzer {
             case TASK ->
                     analyzerStrategy = new TaskStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
             case VIRTUAL_THREAD -> analyzerStrategy = new VirtualThreadStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
-            case EVENTS -> analyzerStrategy = new EventLoopStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
-            case ASYNC_EVENTS -> analyzerStrategy = new AsyncEventLoopStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
+            case ACTORS -> analyzerStrategy = new ActorStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
+            case EVENTS -> analyzerStrategy = new EventStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
             case REACTIVE -> analyzerStrategy = new ReactiveStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
         }
     }

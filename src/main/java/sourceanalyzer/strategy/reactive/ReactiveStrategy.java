@@ -14,6 +14,9 @@ import java.util.function.Function;
 
 public class ReactiveStrategy extends AbstractAnalyzerStrategy {
 
+    private ConnectableFlowable<Path> hotObservableFiles;
+    private Disposable subscribe;
+
     public ReactiveStrategy(String path, int intervals, int maxLines, int topFilesNumber, Function<Pair<String, Integer>, Void> fileProcessedHandler) {
         super(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
     }
@@ -35,33 +38,26 @@ public class ReactiveStrategy extends AbstractAnalyzerStrategy {
     @Override
     public void startAnalyzing() {
         // riempire files leggendo la directory
-        Disposable disposable = Flowable.just(getPath())
+        Flowable.just(getPath())
                 .map(Utils::readFiles)
                 .subscribe((files) -> {
-                    // create observable
-                    Flowable<Path> pathSource = Flowable.fromArray(files.toArray(Path[]::new));
-                    // make it hot!
-                    ConnectableFlowable<Path> hotObservable = pathSource.publish();
+                    // create observable and make it hot!
+                    hotObservableFiles = Flowable.fromArray(files.toArray(Path[]::new)).publish();
                     // connect to it
-                    hotObservable.connect();
-                    hotObservable.observeOn(Schedulers.computation())
+                    hotObservableFiles.connect();
+                    subscribe = hotObservableFiles.observeOn(Schedulers.computation())
                             .map(Utils::countLines)
                             .subscribe((processedFile) -> {
                                 this.getFileProcessedHandler().apply(processedFile);
-                                // Thread.sleep(5000);
-                            }).dispose();
-                });
-        disposable.dispose();
-    }
-
-    public void test() {
-
-        /*ConnectableObservable<Integer> hotObservable = source.publish();
-        hotObservable.connect();*/
+                            });
+                }).dispose();
     }
 
     @Override
     public void stopAnalyzing() {
-
+        // dispose the subscription and reset the observable
+        subscribe.dispose();
+        hotObservableFiles.blockingSubscribe();
+        hotObservableFiles.reset();
     }
 }
