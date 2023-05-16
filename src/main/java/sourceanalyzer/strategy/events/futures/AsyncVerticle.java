@@ -5,8 +5,10 @@ import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.common.Utils;
 
+import java.awt.*;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -44,10 +46,9 @@ public class AsyncVerticle extends AbstractVerticle {
     @Override
     public void stop() {
         for (CompletableFuture<Pair<String, Integer>> future : completableFutures) {
-            System.out.println(future.resultNow());
-            System.out.println(future.cancel(true));
             future.cancel(true);
         }
+        System.out.println("Verticle stopped");
     }
 
     protected Future<Set<Path>> readFiles() {
@@ -65,7 +66,7 @@ public class AsyncVerticle extends AbstractVerticle {
     protected void countLines(Future<Set<Path>> filesRead) {
         List<Future> futures = new ArrayList<>();
         filesRead.onComplete((AsyncResult<Set<Path>> files) -> {
-            files.result().forEach(file -> {
+            for (Path file : files.result()) {
                 Future<Pair<String, Integer>> future = this.getVertx().executeBlocking(promise -> {
                     try {
                         Pair<String, Integer> processedFile = Utils.countLines(file);
@@ -76,7 +77,7 @@ public class AsyncVerticle extends AbstractVerticle {
                     }
                 });
                 futures.add(future);
-            });
+            }
             CompositeFuture.all(futures).onSuccess((CompositeFuture res) -> reportHandler.apply(new HashSet<>(res.result().list())));
         });
     }
@@ -85,9 +86,16 @@ public class AsyncVerticle extends AbstractVerticle {
         filesRead.onComplete((AsyncResult<Set<Path>> files) -> {
             files.result().forEach(file -> {
                 CompletableFuture<Pair<String, Integer>> completableFuture = new CompletableFuture<>();
-                completableFuture.complete(Utils.countLines(file));
-                completableFuture.whenComplete((fileComputed, throwable) -> this.fileProcessedHandler.apply(fileComputed));
-                completableFutures.add(completableFuture);
+                this.getVertx().executeBlocking(promise -> {
+                    try {
+                        Pair<String, Integer> processedFile = Utils.countLines(file);
+                        promise.complete(processedFile);
+                    } catch (Exception e) {
+                        promise.fail("Exception while counting file line of file " + file.getFileName());
+                        e.printStackTrace();
+                    }
+                }, res -> completableFuture.complete((Pair<String, Integer>) res.result()));
+                completableFuture.whenComplete((processedFile, throwable) -> this.fileProcessedHandler.apply(processedFile));
             });
         });
     }

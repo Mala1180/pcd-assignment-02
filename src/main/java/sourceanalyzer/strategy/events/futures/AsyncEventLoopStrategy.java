@@ -44,9 +44,7 @@ public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
 
     @Override
     public void stopAnalyzing() {
-        System.out.println("Stopping analyzing...");
         vertx.undeploy(verticle.deploymentID());
-
     }
 
     protected Report createReport() {
