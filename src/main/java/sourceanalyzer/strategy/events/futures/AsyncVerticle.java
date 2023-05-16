@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class AsyncVerticle extends AbstractVerticle {
 
@@ -42,9 +43,11 @@ public class AsyncVerticle extends AbstractVerticle {
 
     @Override
     public void stop() {
-        completableFutures.forEach(completableFuture -> {
-            completableFuture.cancel(true);
-        });
+        for (CompletableFuture<Pair<String, Integer>> future : completableFutures) {
+            System.out.println(future.resultNow());
+            System.out.println(future.cancel(true));
+            future.cancel(true);
+        }
     }
 
     protected Future<Set<Path>> readFiles() {

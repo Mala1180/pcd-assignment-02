@@ -1,5 +1,6 @@
 package sourceanalyzer.strategy.events.futures;
 
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
@@ -38,12 +39,14 @@ public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
     @Override
     public void startAnalyzing() {
         verticle.setIncrementally(true);
-        vertx.deployVerticle(verticle);
+        vertx.deployVerticle(verticle, new DeploymentOptions().setWorkerPoolName("worker-pool"));
     }
 
     @Override
     public void stopAnalyzing() {
-        verticle.stop();
+        System.out.println("Stopping analyzing...");
+        vertx.undeploy(verticle.deploymentID());
+
     }
 
     protected Report createReport() {

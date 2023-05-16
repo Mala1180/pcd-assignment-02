@@ -22,8 +22,14 @@ public class Controller {
             new Thread(() -> {
                 try {
                     switch (event) {
-                        case START -> startCounting();
-                        case STOP -> stopCounting();
+                        case START -> {
+                            System.out.println("START");
+                            startCounting();
+                        }
+                        case STOP -> {
+                            System.out.println("STOP");
+                            stopCounting();
+                        }
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

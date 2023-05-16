@@ -15,7 +15,7 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
 
     private ExecutorService executor;
     private Future<Set<Path>> readFilesFuture;
-    private Set<Future<Pair<String, Integer>>> countLinesFuture;
+    private Set<Future<Pair<String, Integer>>> countLinesFuture = new HashSet<>();
 
     public TaskStrategy(String path, int intervals, int maxLines, int topFilesNumber, Function<Pair<String, Integer>, Void> fileProcessedHandler) {
         super(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
