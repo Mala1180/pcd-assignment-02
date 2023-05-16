@@ -5,6 +5,8 @@ import io.vertx.core.Vertx;
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AbstractAnalyzerStrategy;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
 public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
@@ -21,13 +23,19 @@ public class AsyncEventLoopStrategy extends AbstractAnalyzerStrategy {
 
     @Override
     public Report makeReport() {
+        CompletableFuture<Report> future = new CompletableFuture<>();
         verticle.setIncrementally(false);
         verticle.setReportHandler((processedFiles) -> {
             super.setProcessedFiles(processedFiles);
+            future.complete(super.createReport());
             return null;
         });
         vertx.deployVerticle(verticle);
-        return super.createReport();
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
