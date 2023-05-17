@@ -34,10 +34,14 @@ public class SourceAnalyzerImpl implements SourceAnalyzer {
         switch (approach) {
             case TASK ->
                     analyzerStrategy = new TaskStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
-            case VIRTUAL_THREAD -> analyzerStrategy = new VirtualThreadStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
-            case ACTORS -> analyzerStrategy = new ActorStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
-            case EVENTS -> analyzerStrategy = new EventStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
-            case REACTIVE -> analyzerStrategy = new ReactiveStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
+            case VIRTUAL_THREAD ->
+                    analyzerStrategy = new VirtualThreadStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
+            case ACTORS ->
+                    analyzerStrategy = new ActorStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
+            case EVENTS ->
+                    analyzerStrategy = new EventStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
+            case REACTIVE ->
+                    analyzerStrategy = new ReactiveStrategy(path, intervals, maxLines, topFilesNumber, fileProcessedHandler);
         }
     }
 

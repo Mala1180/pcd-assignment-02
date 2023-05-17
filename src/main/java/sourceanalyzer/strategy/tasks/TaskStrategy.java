@@ -40,19 +40,6 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
         this.countLinesIncrementally();
     }
 
-    protected void countLinesIncrementally() {
-        for (Path file : getFiles()) {
-            CompletableFuture<Pair<String, Integer>> completableFuture = new CompletableFuture<>();
-            completableFuture.whenComplete((fileComputed, throwable) -> getFileProcessedHandler().apply(fileComputed));
-            executor.submit(() -> completableFuture.complete(new CountFileLinesTask(file).call()));
-        }
-        try {
-            shutdownExecutor();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public void stopAnalyzing() {
         this.executor.shutdownNow();
@@ -67,13 +54,25 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
         }
     }
 
-
     protected void readFiles() {
         this.readFilesFuture = executor.submit(new ReadFilesTask(getPath()));
         try {
             setFiles(readFilesFuture.get());
             shutdownExecutor();
         } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected void countLinesIncrementally() {
+        for (Path file : getFiles()) {
+            CompletableFuture<Pair<String, Integer>> completableFuture = new CompletableFuture<>();
+            completableFuture.whenComplete((fileComputed, throwable) -> getFileProcessedHandler().apply(fileComputed));
+            executor.submit(() -> completableFuture.complete(new CountFileLinesTask(file).call()));
+        }
+        try {
+            shutdownExecutor();
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -87,7 +86,7 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
             shutdownExecutor();
             for (Future<Pair<String, Integer>> future : countLinesFuture) {
                 Pair<String, Integer> pair = future.get();
-                getProcessedFiles().add(pair);
+                super.getProcessedFiles().add(pair);
             }
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);

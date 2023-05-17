@@ -16,17 +16,17 @@ public class VirtualThreadStrategy extends TaskStrategy {
     @Override
     public void startAnalyzing() {
         setExecutor(Executors.newVirtualThreadPerTaskExecutor());
-        this.readFiles();
+        super.readFiles();
         setExecutor(Executors.newVirtualThreadPerTaskExecutor());
-        this.countLinesIncrementally();
+        super.countLinesIncrementally();
     }
 
     @Override
     public Report makeReport() {
-        this.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
-        this.readFiles();
-        this.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
-        this.countLines();
+        super.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
+        super.readFiles();
+        super.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
+        super.countLines();
         return super.createReport();
     }
 }

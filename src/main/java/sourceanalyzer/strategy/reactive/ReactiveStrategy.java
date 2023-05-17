@@ -29,7 +29,7 @@ public class ReactiveStrategy extends AbstractAnalyzerStrategy {
                     Flowable<Path> pathSource = Flowable.fromArray(files.toArray(Path[]::new));
                     pathSource.map(Utils::countLines).subscribe((processedFile) -> {
                         System.out.println(processedFile);
-                        this.getProcessedFiles().add(processedFile);
+                        super.getProcessedFiles().add(processedFile);
                     }).dispose();
                 }).dispose();
         return super.createReport();

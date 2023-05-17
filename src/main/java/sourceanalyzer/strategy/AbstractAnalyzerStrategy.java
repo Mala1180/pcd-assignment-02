@@ -13,8 +13,8 @@ public abstract class AbstractAnalyzerStrategy implements AnalyzerStrategy {
     private String path;
     private int intervals;
     private int maxLines;
-    private int topFilesNumber;
-    private Function<Pair<String, Integer>, Void> fileProcessedHandler;
+    private final int topFilesNumber;
+    private final Function<Pair<String, Integer>, Void> fileProcessedHandler;
 
 
     public AbstractAnalyzerStrategy(String path, int intervals, int maxLines, int topFilesNumber, Function<Pair<String, Integer>, Void> fileProcessedHandler) {
@@ -69,17 +69,10 @@ public abstract class AbstractAnalyzerStrategy implements AnalyzerStrategy {
         return topFilesNumber;
     }
 
-    public void setTopFilesNumber(int topFilesNumber) {
-        this.topFilesNumber = topFilesNumber;
-    }
-
     public Function<Pair<String, Integer>, Void> getFileProcessedHandler() {
         return fileProcessedHandler;
     }
 
-    public void setFileProcessedHandler(Function<Pair<String, Integer>, Void> fileProcessedHandler) {
-        this.fileProcessedHandler = fileProcessedHandler;
-    }
 
     protected Report createReport() {
         List<Pair<String, Integer>> longestFiles = getProcessedFiles().stream()
