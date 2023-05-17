@@ -28,8 +28,7 @@ public class View extends JFrame implements ActionListener, ModelObserver {
 
     private final JFileChooser chooser = new JFileChooser();
     private final JComboBox<String> approachCombo = new JComboBox<>(approaches);
-    //                                                    "/Users/mattia/Desktop/Università/Triennale"
-    private final JTextField directoryTxt = new JTextField("/Users/mattia/Downloads/sources", 20);
+    private final JTextField directoryTxt = new JTextField("", 20);
     private final JTextField intervalsTxt = new JTextField("5", 5);
     private final JTextField maxLinesTxt = new JTextField("300", 5);
 
