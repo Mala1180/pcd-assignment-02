@@ -64,33 +64,34 @@ public class View extends JFrame implements ActionListener, ModelObserver {
     @Override
     public void modelUpdated(Model model) {
         try {
-            if (Approach.getByMessage(String.valueOf(approachCombo.getSelectedItem())) == Approach.EVENTS) {
+            if (Approach.getByMessage(String.valueOf(approachCombo.getSelectedItem())) == Approach.EVENTS ||
+                    Approach.getByMessage(String.valueOf(approachCombo.getSelectedItem())) == Approach.REACTIVE ||
+                    Approach.getByMessage(String.valueOf(approachCombo.getSelectedItem())) == Approach.ACTORS) {
                 System.out.println("Thread: " + Thread.currentThread().getName());
-                this.distributionListModel.clear();
-                this.topFilesListModel.clear();
-                model.getDistributions().forEach((k, v) -> {
-                    this.distributionListModel.addElement(k + " " + v);
+                SwingUtilities.invokeAndWait(() -> {
+                    System.out.println("Thread: " + Thread.currentThread().getName());
+                    updateGUI(model);
                 });
-                model.getTopFiles().entrySet()
-                        .stream()
-                        .sorted((a, b) -> b.getValue() - a.getValue())
-                        .forEach(entry -> this.topFilesListModel.addElement(entry.getKey() + " " + entry.getValue()));
             } else {
                 SwingUtilities.invokeLater(() -> {
-                    this.distributionListModel.clear();
-                    this.topFilesListModel.clear();
-                    model.getDistributions().forEach((k, v) -> {
-                        this.distributionListModel.addElement(k + " " + v);
-                    });
-                    model.getTopFiles().entrySet()
-                            .stream()
-                            .sorted((a, b) -> b.getValue() - a.getValue())
-                            .forEach(entry -> this.topFilesListModel.addElement(entry.getKey() + " " + entry.getValue()));
+                    updateGUI(model);
                 });
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void updateGUI(Model model) {
+        this.distributionListModel.clear();
+        this.topFilesListModel.clear();
+        model.getDistributions().forEach((k, v) -> {
+            this.distributionListModel.addElement(k + " " + v);
+        });
+        model.getTopFiles().entrySet()
+                .stream()
+                .sorted((a, b) -> b.getValue() - a.getValue())
+                .forEach(entry -> this.topFilesListModel.addElement(entry.getKey() + " " + entry.getValue()));
     }
 
 
