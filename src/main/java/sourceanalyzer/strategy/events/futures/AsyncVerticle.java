@@ -1,18 +1,20 @@
 package sourceanalyzer.strategy.events.futures;
 
-import app.utils.Chronometer;
-import io.vertx.core.*;
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Future;
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.common.Utils;
 
-import java.awt.*;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class AsyncVerticle extends AbstractVerticle {
 

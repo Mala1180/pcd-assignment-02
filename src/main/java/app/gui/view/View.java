@@ -29,7 +29,7 @@ public class View extends JFrame implements ActionListener, ModelObserver {
 
     private final JFileChooser chooser = new JFileChooser();
     private final JComboBox<String> approachCombo = new JComboBox<>(approaches);
-    private final JTextField directoryTxt = new JTextField(PathTest.TEST2000.getPath(), 20);
+    private final JTextField directoryTxt = new JTextField(PathTest.TEST1300.getPath(), 20);
     private final JTextField intervalsTxt = new JTextField("5", 5);
     private final JTextField maxLinesTxt = new JTextField("300", 5);
 
