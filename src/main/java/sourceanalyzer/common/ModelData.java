@@ -40,7 +40,7 @@ public class ModelData {
             }
         }
         i++;
-        if (i == 1308) {
+        if (i == 2147) {
             Chronometer.stop();
             System.out.println("Time Elapsed: " + Chronometer.getTime());
         }

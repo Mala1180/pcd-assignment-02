@@ -19,7 +19,7 @@ public class AsyncVerticle extends AbstractVerticle {
     private boolean incrementally;
     private final String directoryPath;
     private final Function<Pair<String, Integer>, Void> fileProcessedHandler;
-    private Function<Set<Pair<String, Integer>>, Report> reportHandler;
+    private Function<List<Pair<String, Integer>>, Report> reportHandler;
     private final Set<CompletableFuture<Pair<String, Integer>>> completableFutures = new HashSet<>();
     
     public AsyncVerticle(String directoryPath, Function<Pair<String, Integer>, Void> fileProcessedHandler) {
@@ -27,7 +27,7 @@ public class AsyncVerticle extends AbstractVerticle {
         this.fileProcessedHandler = fileProcessedHandler;
     }
 
-    public void setReportHandler(Function<Set<Pair<String, Integer>>, Report> reportHandler) {
+    public void setReportHandler(Function<List<Pair<String, Integer>>, Report> reportHandler) {
         this.reportHandler = reportHandler;
     }
 
@@ -79,7 +79,7 @@ public class AsyncVerticle extends AbstractVerticle {
                 });
                 futures.add(future);
             }
-            CompositeFuture.all(futures).onSuccess((CompositeFuture res) -> reportHandler.apply(new HashSet<>(res.result().list())));
+            CompositeFuture.all(futures).onSuccess((CompositeFuture res) -> reportHandler.apply(new ArrayList<>(res.result().list())));
         });
     }
 

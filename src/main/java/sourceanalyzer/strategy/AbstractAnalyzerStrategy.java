@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 public abstract class AbstractAnalyzerStrategy implements AnalyzerStrategy {
     private Set<Path> files = new HashSet<>();
-    private Set<Pair<String, Integer>> processedFiles = new HashSet<>();
+    private List<Pair<String, Integer>> processedFiles = new ArrayList<>();
     private String path;
     private int intervals;
     private int maxLines;
@@ -33,11 +33,11 @@ public abstract class AbstractAnalyzerStrategy implements AnalyzerStrategy {
         this.files = files;
     }
 
-    public Set<Pair<String, Integer>> getProcessedFiles() {
+    public List<Pair<String, Integer>> getProcessedFiles() {
         return processedFiles;
     }
 
-    public void setProcessedFiles(Set<Pair<String, Integer>> processedFiles) {
+    public void setProcessedFiles(List<Pair<String, Integer>> processedFiles) {
         this.processedFiles = processedFiles;
     }
 
@@ -74,6 +74,7 @@ public abstract class AbstractAnalyzerStrategy implements AnalyzerStrategy {
     }
 
     protected Report createReport() {
+        System.out.println("getProcessedFiles: " + getProcessedFiles().size());
         List<Pair<String, Integer>> longestFiles = getProcessedFiles().stream()
                 .sorted((o1, o2) -> o2.getSecond().compareTo(o1.getSecond()))
                 .limit(getTopFilesNumber()).toList();

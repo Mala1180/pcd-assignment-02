@@ -29,7 +29,7 @@ public class View extends JFrame implements ActionListener, ModelObserver {
 
     private final JFileChooser chooser = new JFileChooser();
     private final JComboBox<String> approachCombo = new JComboBox<>(approaches);
-    private final JTextField directoryTxt = new JTextField(PathTest.TEST1300.getPath(), 20);
+    private final JTextField directoryTxt = new JTextField(PathTest.TEST2000.getPath(), 20);
     private final JTextField intervalsTxt = new JTextField("5", 5);
     private final JTextField maxLinesTxt = new JTextField("300", 5);
 
@@ -67,9 +67,7 @@ public class View extends JFrame implements ActionListener, ModelObserver {
             if (Approach.getByMessage(String.valueOf(approachCombo.getSelectedItem())) == Approach.EVENTS ||
                     Approach.getByMessage(String.valueOf(approachCombo.getSelectedItem())) == Approach.REACTIVE ||
                     Approach.getByMessage(String.valueOf(approachCombo.getSelectedItem())) == Approach.ACTORS) {
-                System.out.println("Thread: " + Thread.currentThread().getName());
                 SwingUtilities.invokeAndWait(() -> {
-                    System.out.println("Thread: " + Thread.currentThread().getName());
                     updateGUI(model);
                 });
             } else {
