@@ -1,5 +1,6 @@
 package sourceanalyzer.strategy.events.futures;
 
+import app.utils.Chronometer;
 import io.vertx.core.*;
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
@@ -20,7 +21,7 @@ public class AsyncVerticle extends AbstractVerticle {
     private final Function<Pair<String, Integer>, Void> fileProcessedHandler;
     private Function<Set<Pair<String, Integer>>, Report> reportHandler;
     private final Set<CompletableFuture<Pair<String, Integer>>> completableFutures = new HashSet<>();
-
+    
     public AsyncVerticle(String directoryPath, Function<Pair<String, Integer>, Void> fileProcessedHandler) {
         this.directoryPath = directoryPath;
         this.fileProcessedHandler = fileProcessedHandler;

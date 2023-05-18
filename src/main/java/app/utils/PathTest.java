@@ -2,6 +2,7 @@ package app.utils;
 
 public enum PathTest {
 
+    TEST1300(System.getProperty("user.home") + "/Desktop/Università"),
     TEST2000(System.getProperty("user.home") + "/Downloads/sources2000"),
     TEST8000(System.getProperty("user.home") + "/Downloads/sources8000");
 

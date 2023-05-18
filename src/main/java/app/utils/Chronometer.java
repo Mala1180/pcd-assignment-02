@@ -1,29 +1,21 @@
 package app.utils;
 
-public class Chronometer {
+public final class Chronometer {
 
-    private boolean running;
-    private long startTime;
+    private static long startTime;
 
-    public Chronometer() {
-        running = false;
+    private Chronometer() {
     }
 
-    public void start() {
-        running = true;
+    public static void start() {
         startTime = System.currentTimeMillis();
     }
 
-    public void stop() {
-        startTime = getTime();
-        running = false;
+    public static void stop() {
+        startTime = System.currentTimeMillis() - startTime;
     }
 
-    public long getTime() {
-        if (running) {
-            return System.currentTimeMillis() - startTime;
-        } else {
-            return startTime;
-        }
+    public static long getTime() {
+        return startTime;
     }
 }

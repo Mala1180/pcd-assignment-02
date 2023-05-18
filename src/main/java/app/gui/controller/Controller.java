@@ -2,8 +2,11 @@ package app.gui.controller;
 
 import app.gui.model.Model;
 import app.utils.Approach;
+import app.utils.Chronometer;
 import app.utils.Event;
 import sourceanalyzer.SourceAnalyzerImpl;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Controller {
 
@@ -36,6 +39,7 @@ public class Controller {
     }
 
     public void startCounting() {
+        Chronometer.start();
         SourceAnalyzerImpl sourceAnalyser = SourceAnalyzerImpl.getInstance();
         sourceAnalyser.analyzeSources(model.getApproach(), model.getDirectoryPath(), model.getIntervals(), model.getMaxLines(),
                 Model.TOP_FILES_NUMBER, (processedFile) -> {

@@ -4,6 +4,7 @@ import app.gui.controller.Controller;
 import app.gui.model.Model;
 import app.utils.Approach;
 import app.utils.Event;
+import app.utils.PathTest;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,7 +29,7 @@ public class View extends JFrame implements ActionListener, ModelObserver {
 
     private final JFileChooser chooser = new JFileChooser();
     private final JComboBox<String> approachCombo = new JComboBox<>(approaches);
-    private final JTextField directoryTxt = new JTextField("", 20);
+    private final JTextField directoryTxt = new JTextField(PathTest.TEST1300.getPath(), 20);
     private final JTextField intervalsTxt = new JTextField("5", 5);
     private final JTextField maxLinesTxt = new JTextField("300", 5);
 
@@ -63,7 +64,8 @@ public class View extends JFrame implements ActionListener, ModelObserver {
     @Override
     public void modelUpdated(Model model) {
         try {
-            SwingUtilities.invokeLater(() -> {
+            if (Approach.getByMessage(String.valueOf(approachCombo.getSelectedItem())) == Approach.EVENTS) {
+                System.out.println("Thread: " + Thread.currentThread().getName());
                 this.distributionListModel.clear();
                 this.topFilesListModel.clear();
                 model.getDistributions().forEach((k, v) -> {
@@ -73,7 +75,19 @@ public class View extends JFrame implements ActionListener, ModelObserver {
                         .stream()
                         .sorted((a, b) -> b.getValue() - a.getValue())
                         .forEach(entry -> this.topFilesListModel.addElement(entry.getKey() + " " + entry.getValue()));
-            });
+            } else {
+                SwingUtilities.invokeLater(() -> {
+                    this.distributionListModel.clear();
+                    this.topFilesListModel.clear();
+                    model.getDistributions().forEach((k, v) -> {
+                        this.distributionListModel.addElement(k + " " + v);
+                    });
+                    model.getTopFiles().entrySet()
+                            .stream()
+                            .sorted((a, b) -> b.getValue() - a.getValue())
+                            .forEach(entry -> this.topFilesListModel.addElement(entry.getKey() + " " + entry.getValue()));
+                });
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

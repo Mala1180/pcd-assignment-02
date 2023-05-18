@@ -96,6 +96,7 @@ public class TaskStrategy extends AbstractAnalyzerStrategy {
     protected void shutdownExecutor() throws InterruptedException {
         this.executor.shutdown();
         boolean isTerminatedCorrectly = this.executor.awaitTermination(30, TimeUnit.SECONDS);
+
         if (!isTerminatedCorrectly) {
             throw new RuntimeException("Executor terminated with timeout");
         }

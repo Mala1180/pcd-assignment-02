@@ -1,6 +1,7 @@
 package sourceanalyzer.common;
 
 import app.gui.model.Model;
+import app.utils.Chronometer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,7 @@ public class ModelData {
         }
     }
 
+    int i = 0;
     public void updateDistributions(String fileName, Integer fileLines, Integer intervals, Integer maxLines) {
         int linesPerInterval = maxLines / (intervals - 1);
         int index = fileLines / linesPerInterval;
@@ -36,6 +38,11 @@ public class ModelData {
                 topFiles.put(fileName, fileLines);
                 topFiles.remove(minEntry.getKey());
             }
+        }
+        i++;
+        if (i == 1308) {
+            Chronometer.stop();
+            System.out.println("Time Elapsed: " + Chronometer.getTime());
         }
     }
 

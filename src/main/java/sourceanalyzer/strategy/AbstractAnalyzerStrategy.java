@@ -73,7 +73,6 @@ public abstract class AbstractAnalyzerStrategy implements AnalyzerStrategy {
         return fileProcessedHandler;
     }
 
-
     protected Report createReport() {
         List<Pair<String, Integer>> longestFiles = getProcessedFiles().stream()
                 .sorted((o1, o2) -> o2.getSecond().compareTo(o1.getSecond()))
