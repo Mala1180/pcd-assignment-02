@@ -1,4 +1,4 @@
-package app.gui.utils;
+package app.utils;
 
 import java.util.Arrays;
 

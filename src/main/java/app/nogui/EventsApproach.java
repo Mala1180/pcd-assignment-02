@@ -1,9 +1,10 @@
 package app.nogui;
 
 import app.gui.model.Model;
-import app.gui.utils.Approach;
+import app.utils.Approach;
+import app.utils.PathTest;
 import sourceanalyzer.SourceAnalyzerImpl;
-import sourceanalyzer.common.Chronometer;
+import app.utils.Chronometer;
 import sourceanalyzer.common.Report;
 
 public class EventsApproach {
@@ -11,7 +12,7 @@ public class EventsApproach {
     public static void main(String[] args) {
         Chronometer chronometer = new Chronometer();
         chronometer.start();
-        Report report = SourceAnalyzerImpl.getInstance().getReport(Approach.EVENTS, "src/main/java",
+        Report report = SourceAnalyzerImpl.getInstance().getReport(Approach.EVENTS, PathTest.TEST2000.getPath(),
                 5, 1000, Model.TOP_FILES_NUMBER);
         chronometer.stop();
         System.out.println("Time elapsed: " + chronometer.getTime() + " ms");

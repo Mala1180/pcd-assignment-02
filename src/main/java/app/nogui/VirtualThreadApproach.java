@@ -1,9 +1,10 @@
 package app.nogui;
 
 import app.gui.model.Model;
-import app.gui.utils.Approach;
+import app.utils.Approach;
+import app.utils.PathTest;
 import sourceanalyzer.SourceAnalyzerImpl;
-import sourceanalyzer.common.Chronometer;
+import app.utils.Chronometer;
 import sourceanalyzer.common.Report;
 
 public class VirtualThreadApproach {
@@ -11,7 +12,7 @@ public class VirtualThreadApproach {
     public static void main(String[] args) {
         Chronometer chronometer = new Chronometer();
         chronometer.start();
-        Report report = SourceAnalyzerImpl.getInstance().getReport(Approach.VIRTUAL_THREAD, "src/main/java",
+        Report report = SourceAnalyzerImpl.getInstance().getReport(Approach.VIRTUAL_THREAD, PathTest.TEST2000.getPath(),
                 5, 1000, Model.TOP_FILES_NUMBER);
         chronometer.stop();
         System.out.println("Time elapsed: " + chronometer.getTime() + " ms");

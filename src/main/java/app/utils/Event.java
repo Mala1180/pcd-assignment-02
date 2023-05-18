@@ -1,4 +1,4 @@
-package app.gui.utils;
+package app.utils;
 
 public enum Event {
 

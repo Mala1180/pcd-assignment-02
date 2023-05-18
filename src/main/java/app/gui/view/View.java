@@ -2,8 +2,8 @@ package app.gui.view;
 
 import app.gui.controller.Controller;
 import app.gui.model.Model;
-import app.gui.utils.Approach;
-import app.gui.utils.Event;
+import app.utils.Approach;
+import app.utils.Event;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

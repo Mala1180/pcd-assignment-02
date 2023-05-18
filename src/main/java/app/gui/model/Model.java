@@ -1,6 +1,6 @@
 package app.gui.model;
 
-import app.gui.utils.Approach;
+import app.utils.Approach;
 import app.gui.view.ModelObserver;
 import sourceanalyzer.common.ModelData;
 

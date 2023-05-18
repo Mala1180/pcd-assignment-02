@@ -1,6 +1,6 @@
 package sourceanalyzer;
 
-import app.gui.utils.Approach;
+import app.utils.Approach;
 import sourceanalyzer.common.Pair;
 import sourceanalyzer.common.Report;
 import sourceanalyzer.strategy.AnalyzerStrategy;

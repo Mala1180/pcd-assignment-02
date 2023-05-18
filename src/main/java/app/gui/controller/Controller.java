@@ -1,8 +1,8 @@
 package app.gui.controller;
 
 import app.gui.model.Model;
-import app.gui.utils.Approach;
-import app.gui.utils.Event;
+import app.utils.Approach;
+import app.utils.Event;
 import sourceanalyzer.SourceAnalyzerImpl;
 
 public class Controller {
